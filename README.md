@@ -11,11 +11,11 @@
 ## Roadmap
 
 - [x] SQLite connection
-- [] Data extraction
-  - [] History
-  - [] Cookie
-  - [] Form
-  - [] Download
-  - [] Bookmarks
-- [] CLI interface integration
-- [] App bundling
+- [ ] Data extraction
+  - [x] History
+  - [ ] Cookie
+  - [ ] Form
+  - [ ] Download
+  - [ ] Bookmarks
+- [ ] CLI interface integration
+- [ ] App bundling
