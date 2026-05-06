@@ -4,6 +4,7 @@ mod discovery;
 mod database;
 mod history;
 mod cookies;
+mod download;
 mod writer;
 mod models;
 
@@ -33,13 +34,21 @@ fn main() {
         },
         Err(e) => println!("[!] Failed to extract history: {}", e),
       }
+
+      match download::extract_downloads(&conn) {
+        Ok(entries) => {
+          let _ = writer::save_downloads_to_csv(&entries, "outputs/download_report.csv");
+          println!("[+] Extracted {} download entries to 'outputs/download_report.csv'", entries.len());
+        },
+        Err(e) => println!("[!] Failed to extract download: {}", e)
+      }
     }
 
     if let Ok(conn) = database::establish_connection(target_path, "cookies.sqlite") {
       match cookies::extract_cookies(&conn) {
         Ok(entries) => {
           let _ = writer::save_cookies_to_csv(&entries, "outputs/cookies_report.csv");
-          println!("[+] Extracted {} cookies to 'outputs/cookies_report.csv'", entries.len());
+          println!("[+] Extracted {} cookie entries to 'outputs/cookies_report.csv'", entries.len());
         },
         Err(e) => println!("[!] Failed to extract cookies: {}", e),
       }

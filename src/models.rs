@@ -12,3 +12,9 @@ pub struct CookieEntry {
   pub path: String,
   pub expiry: i64,
 }
+
+pub struct DownloadEntry {
+  pub url: String,
+  pub path: String,
+  pub date_added: i64,
+}

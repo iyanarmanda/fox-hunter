@@ -1,4 +1,4 @@
-use crate::models::{HistoryEntry, CookieEntry};
+use crate::models::{HistoryEntry, CookieEntry, DownloadEntry};
 use chrono::{DateTime, Utc};
 use std::error::Error;
 use std::fs::File;
@@ -38,6 +38,27 @@ pub fn save_cookies_to_csv(entries: &[CookieEntry], filename: &str) -> Result<()
       &entry.host,
       &entry.path,
       &entry.expiry.to_string(),
+    ])?;
+  }
+
+  wtr.flush()?;
+  Ok(())
+}
+
+pub fn save_downloads_to_csv(entries: &[DownloadEntry], filename: &str) -> Result<(), Box<dyn std::error::Error>> {
+  let file = File::create(filename)?;
+  let mut wtr = csv::Writer::from_writer(file);
+
+  wtr.write_record(&["URL", "Local Path", "Download Date"])?;
+
+  for entry in entries {
+    let datetime: DateTime<Utc> = DateTime::from_timestamp(entry.date_added / 1_000_000, 0)
+      .unwrap_or_default();
+
+    wtr.write_record(&[
+      &entry.url,
+      &entry.path,
+      &datetime.format("%Y-%m-%d %H:%M:%S").to_string(),
     ])?;
   }
 
