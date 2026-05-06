@@ -13,7 +13,7 @@
 - [x] SQLite connection
 - [ ] Data extraction
   - [x] History
-  - [ ] Cookie
+  - [x] Cookie
   - [ ] Form
   - [ ] Download
   - [ ] Bookmarks

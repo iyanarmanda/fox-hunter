@@ -4,3 +4,11 @@ pub struct HistoryEntry {
   pub visit_count: i32,
   pub last_visit_date: i64,
 }
+
+pub struct CookieEntry {
+  pub name: String,
+  pub value: String,
+  pub host: String,
+  pub path: String,
+  pub expiry: i64,
+}
