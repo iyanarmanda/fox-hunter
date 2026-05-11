@@ -1,4 +1,4 @@
-use crate::models::{HistoryEntry, CookieEntry, DownloadEntry};
+use crate::models::{HistoryEntry, CookieEntry, DownloadEntry, FormEntry};
 use chrono::{DateTime, Utc};
 use std::error::Error;
 use std::fs::File;
@@ -59,6 +59,30 @@ pub fn save_downloads_to_csv(entries: &[DownloadEntry], filename: &str) -> Resul
       &entry.url,
       &entry.path,
       &datetime.format("%Y-%m-%d %H:%M:%S").to_string(),
+    ])?;
+  }
+
+  wtr.flush()?;
+  Ok(())
+}
+
+
+pub fn save_forms_to_csv(entries: &[FormEntry], filename: &str) -> Result<(), Box<dyn std::error::Error>> {
+  let file = std::fs::File::create(filename)?;
+  let mut wtr = csv::Writer::from_writer(file);
+
+  wtr.write_record(&["Field Name", "Value", "Times Used", "First Used", "Last Used"])?;
+
+  for entry in entries {
+    let first: chrono::DateTime<chrono::Utc> = chrono::DateTime::from_timestamp(entry.first_used / 1_000_000, 0).unwrap_or_default();
+    let last: chrono::DateTime<chrono::Utc> = chrono::DateTime::from_timestamp(entry.last_used / 1_000_000, 0).unwrap_or_default();
+        
+    wtr.write_record(&[
+      &entry.fieldname,
+      &entry.value,
+      &entry.times_used.to_string(),
+      &first.format("%Y-%m-%d %H:%M:%S").to_string(),
+      &last.format("%Y-%m-%d %H:%M:%S").to_string(),
     ])?;
   }
 

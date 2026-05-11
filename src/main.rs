@@ -5,6 +5,7 @@ mod database;
 mod history;
 mod cookies;
 mod download;
+mod forms;
 mod writer;
 mod models;
 
@@ -51,6 +52,16 @@ fn main() {
           println!("[+] Extracted {} cookie entries to 'outputs/cookies_report.csv'", entries.len());
         },
         Err(e) => println!("[!] Failed to extract cookies: {}", e),
+      }
+    }
+
+    if let Ok(conn) = database::establish_connection(target_path, "formhistory.sqlite") {
+      match forms::extract_forms(&conn) {
+        Ok(entries) => {
+          let _ = writer::save_forms_to_csv(&entries, "outputs/forms_report.csv");
+          println!("[+] Extracted {} data form to 'outputs/forms_report.csv'.", entries.len());
+        },
+        Err(e) => println!("[!] Failed to extract form: {}", e),
       }
     }
 

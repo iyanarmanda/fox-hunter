@@ -18,3 +18,11 @@ pub struct DownloadEntry {
   pub path: String,
   pub date_added: i64,
 }
+
+pub struct FormEntry {
+    pub fieldname: String,
+    pub value: String,
+    pub times_used: i32,
+    pub first_used: i64,
+    pub last_used: i64,
+}
