@@ -20,9 +20,15 @@ pub struct DownloadEntry {
 }
 
 pub struct FormEntry {
-    pub fieldname: String,
-    pub value: String,
-    pub times_used: i32,
-    pub first_used: i64,
-    pub last_used: i64,
+  pub fieldname: String,
+  pub value: String,
+  pub times_used: i32,
+  pub first_used: i64,
+  pub last_used: i64,
+}
+
+pub struct BookmarkEntry {
+  pub title: String,
+  pub url: String,
+  pub date_added: i64,
 }

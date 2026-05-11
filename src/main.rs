@@ -6,6 +6,7 @@ mod history;
 mod cookies;
 mod download;
 mod forms;
+mod bookmarks;
 mod writer;
 mod models;
 
@@ -42,6 +43,14 @@ fn main() {
           println!("[+] Extracted {} download entries to 'outputs/download_report.csv'", entries.len());
         },
         Err(e) => println!("[!] Failed to extract download: {}", e)
+      }
+
+      match bookmarks::extract_bookmarks(&conn) {
+        Ok(entries) => {
+          let _ = writer::save_bookmarks_to_csv(&entries, "outputs/bookmark_report.csv");
+          println!("[+] Extracted {} bookmark entries to 'outputs/bookmark_report.csv'", entries.len());
+        },
+        Err(e) => println!("[!] Failed to extract bookmark: {}", e)
       }
     }
 
