@@ -12,9 +12,9 @@ pub fn extract_bookmarks(conn: &Connection) -> Result<Vec<BookmarkEntry>, String
 
   let bookmark_iter = stmt.query_map([], |row| {
     Ok(BookmarkEntry {
-        title: row.get::<_, Option<String>>(0)?.unwrap_or_default(),
-        url: row.get(1)?,
-        date_added: row.get(2)?,
+      title: row.get::<_, Option<String>>(0)?.unwrap_or_default(),
+      url: row.get(1)?,
+      date_added: row.get(2)?,
     })
   }).map_err(|e| e.to_string())?;
 

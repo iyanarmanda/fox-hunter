@@ -1,4 +1,4 @@
-use crate::models::{HistoryEntry, CookieEntry, DownloadEntry, FormEntry, BookmarkEntry};
+use crate::models::{HistoryEntry, CookieEntry, DownloadEntry, FormEntry, BookmarkEntry, PermissionEntry};
 use chrono::{DateTime, Utc};
 use std::error::Error;
 use std::fs::File;
@@ -104,6 +104,32 @@ pub fn save_bookmarks_to_csv(entries: &[BookmarkEntry], filename: &str) -> Resul
       &entry.title,
       &entry.url,
       &datetime.format("%Y-%m-%d %H:%M:%S").to_string(),
+    ])?;
+  }
+
+  wtr.flush()?;
+  Ok(())
+}
+
+pub fn save_permissions_to_csv(entries: &[PermissionEntry], filename: &str) -> Result<(), Box<dyn std::error::Error>> {
+  let file = std::fs::File::create(filename)?;
+  let mut wtr = csv::Writer::from_writer(file);
+
+  wtr.write_record(&["Origin/Site", "Permission Type", "Status", "Expiry Time"])?;
+
+  for entry in entries {
+    let status = match entry.permission {
+      1 => "ALLOW",
+      2 => "BLOCK",
+      8 => "PROMPT",
+      _ => "UNKNOWN",
+    };
+
+    wtr.write_record(&[
+      &entry.origin,
+      &entry.perm_type,
+      status,
+      &entry.expire_time.to_string(),
     ])?;
   }
 

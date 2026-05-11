@@ -7,6 +7,7 @@ mod cookies;
 mod download;
 mod forms;
 mod bookmarks;
+mod permissions;
 mod writer;
 mod models;
 
@@ -71,6 +72,16 @@ fn main() {
           println!("[+] Extracted {} data form to 'outputs/forms_report.csv'.", entries.len());
         },
         Err(e) => println!("[!] Failed to extract form: {}", e),
+      }
+    }
+
+    if let Ok(conn) = database::establish_connection(target_path, "permissions.sqlite") {
+      match permissions::extract_permissions(&conn) {
+        Ok(entries) => {
+          let _ = writer::save_permissions_to_csv(&entries, "outputs/permissions_report.csv");
+          println!("[+] Extracted {} web permissions to 'outputs/permissions_report.csv'.", entries.len());
+        },
+        Err(e) => println!("[!] Failed to extract web permissions: {}", e),
       }
     }
 

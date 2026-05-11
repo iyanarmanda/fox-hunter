@@ -32,3 +32,10 @@ pub struct BookmarkEntry {
   pub url: String,
   pub date_added: i64,
 }
+
+pub struct PermissionEntry {
+  pub origin: String,
+  pub perm_type: String,
+  pub permission: i32,
+  pub expire_time: i64,
+}
